@@ -4,7 +4,7 @@ author: 'Dan Webb'
 description: 'Run publish Gems to Rubygems'
 runs:
   using: 'docker'
-  image: docker://ghcr.io/actionshub/publish-gem-to-rubygems:0.0.3
+  image: docker://ghcr.io/actionshub/publish-gem-to-rubygems:v0.0.1
 branding:
   icon: 'edit-3'
   color: 'red'
