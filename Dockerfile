@@ -1,4 +1,4 @@
-FROM ruby:3.1-alpine
+FROM ruby:3.2-alpine
 
 LABEL "com.github.actions.name"="Publish Gem to Rubygems" \
   "com.github.actions.icon"="edit-3" \
