@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-RUBYGEMS_API_KEY=$1
+RUBYGEMS_API_KEY=${1}
 
 [ -z "${RUBYGEMS_API_KEY}" ] && { echo "Missing input.rubygems_api_key!"; exit 2; }
 

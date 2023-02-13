@@ -5,6 +5,9 @@ description: 'Run publish Gems to Rubygems'
 runs:
   using: 'docker'
   image: docker://ghcr.io/actionshub/publish-gem-to-rubygems:v0.0.1
+inputs:
+  api_key:
+    description: "A RubyGems API Token"
 branding:
   icon: 'edit-3'
   color: 'red'
