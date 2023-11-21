@@ -6,7 +6,7 @@ This Action has been heavily influenced by [Jstastny's Publish-Gem-to-Github Act
 
 ## Usage
 
-See [RubyGems API Key scopes][key] on how to obtain an api key
+See [RubyGems API Key scopes][key] on how to obtain an API key
 
 ```yaml
 jobs:
@@ -18,7 +18,7 @@ jobs:
       - name: Build and publish to RubyGems
         uses: actionshub/publish-gem-to-rubygems@main
         with:
-          api_key: ${{ secrets.RUBY_GEMS_API_KEY }}
+          token: ${{ secrets.RUBY_GEMS_API_KEY }}
 ```
 
 [key]: https://guides.rubygems.org/api-key-scopes/
