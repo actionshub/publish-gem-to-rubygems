@@ -6,7 +6,7 @@ This Action has been heavily influenced by [Jstastny's Publish-Gem-to-Github Act
 
 ## Usage
 
-See [RubyGems API Key scopes][key] on how to obtain an api key
+See [RubyGems API Key scopes][key] on how to obtain an API key
 
 ```yaml
 jobs:
