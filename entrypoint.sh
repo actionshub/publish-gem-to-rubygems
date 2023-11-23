@@ -1,9 +1,8 @@
 #!/bin/bash
 
-cd "${GITHUB_WORKSPACE}" || exit 1
 git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
-TOKEN="${1}"
+TOKEN="${INPUT_TOKEN}"
 [ -z "${TOKEN}" ] && { echo "Missing input.token!"; exit 2; }
 
 function setup_credentials_file() {
@@ -18,13 +17,14 @@ function auth_rubygems() {
   echo ":rubygems_api_key: ${1}" > ~/.gem/credentials
 }
 
-function build() {
+function build_and_push() {
+  cd "${1}" || exit 1
   echo "Building gem"
   find . -name '*.gemspec' -maxdepth 1 -exec gem build {} \;
   echo "Pushing gem to rubygems.org"
-  find . -name '*.gem' -maxdepth 1 -exec gem push --key "${1}" {} \;
+  find . -name '*.gem' -maxdepth 1 -exec gem push --key "${2}" {} \;
 }
 
 setup_credentials_file
 auth_rubygems "${TOKEN}"
-build_and_push "rubygems"
+build_and_push "${GITHUB_WORKSPACE}" "rubygems"
