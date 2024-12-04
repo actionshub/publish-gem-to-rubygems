@@ -4,7 +4,7 @@ author: "Dan Webb"
 description: "Publishes Gems to Rubygems"
 runs:
   using: "docker"
-  image: docker://ghcr.io/actionshub/publish-gem-to-rubygems:v2.0.4
+  image: docker://ghcr.io/actionshub/publish-gem-to-rubygems:v2.0.5
 inputs:
   token:
     description: "RubyGems API Key"

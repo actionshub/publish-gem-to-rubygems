@@ -1,4 +1,4 @@
-FROM ruby:3.2.2-alpine3.18
+FROM ruby:3.3.1-alpine3.18
 
 COPY --link --chmod=750 entrypoint.sh /
 COPY --link Gemfile Gemfile.lock /
