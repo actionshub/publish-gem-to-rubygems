@@ -5,4 +5,4 @@ name: Build & Publish container
 
 jobs:
   pull_request:
-    uses: actionshub/reusable-workflows/.github/workflows/pull_request.yaml@99738725f4b9330dee12acfa730290a037031600
+    uses: actionshub/reusable-workflows/.github/workflows/pull_request.yaml@ff4646bc003adbd6743ea5aa6ac3ca10937ff9f4
