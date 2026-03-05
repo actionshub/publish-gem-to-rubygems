@@ -1,30 +1,57 @@
 #!/bin/bash
+set -e
 
+# Trust the workspace directory
 git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
-TOKEN="${INPUT_TOKEN}"
-[ -z "${TOKEN}" ] && { echo "Missing input.token!"; exit 2; }
+function validate_input() {
+  if [ -z "${INPUT_TOKEN}" ]; then
+    echo "::error::Missing 'token' input"
+    exit 1
+  fi
+}
 
-function setup_credentials_file() {
-  echo "Setting up access to RubyGems"
+function setup_credentials() {
+  echo "Configuring RubyGems credentials..."
   mkdir -p ~/.gem
-  touch ~/.gem/credentials
-  chmod 600 ~/.gem/credentials
+  printf "---\n:rubygems_api_key: %s\n" "${INPUT_TOKEN}" > ~/.gem/credentials
+  chmod 0600 ~/.gem/credentials
 }
 
-function auth_rubygems() {
-  echo "Logging in to RubyGems"
-  echo ":rubygems_api_key: ${1}" > ~/.gem/credentials
+function build_gems() {
+  echo "Building gems..."
+  local count=0
+  for spec in *.gemspec; do
+    if [ -f "$spec" ]; then
+      gem build "$spec"
+      ((count++))
+    fi
+  done
+
+  if [ "$count" -eq 0 ]; then
+    echo "::warning::No gemspec files found in ${GITHUB_WORKSPACE}"
+  fi
 }
 
-function build_and_push() {
-  cd "${1}" || exit 1
-  echo "Building gem"
-  find . -name '*.gemspec' -maxdepth 1 -exec gem build {} \;
-  echo "Pushing gem to rubygems.org"
-  find . -name '*.gem' -maxdepth 1 -exec gem push --key "${2}" {} \;
+function push_gems() {
+  echo "Pushing gems to RubyGems.org..."
+  local count=0
+  for gemfile in *.gem; do
+    if [ -f "$gemfile" ]; then
+      gem push "$gemfile"
+      ((count++))
+    fi
+  done
+
+  if [ "$count" -eq 0 ]; then
+    echo "::warning::No .gem files found to push"
+  fi
 }
 
-setup_credentials_file
-auth_rubygems "${TOKEN}"
-build_and_push "${GITHUB_WORKSPACE}" "rubygems"
+# Main execution
+cd "${GITHUB_WORKSPACE}"
+
+validate_input
+setup_credentials
+build_gems
+push_gems
