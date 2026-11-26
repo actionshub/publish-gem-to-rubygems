@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+shell_scripts=(entrypoint.sh test/entrypoint_test.sh script/check)
+
+for script in "${shell_scripts[@]}"; do
+  bash -n "${script}"
+done
+shellcheck "${shell_scripts[@]}"
+actionlint
+bash test/entrypoint_test.sh

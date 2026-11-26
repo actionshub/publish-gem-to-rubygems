@@ -4,5 +4,28 @@ name: Build & Publish container
   pull_request:
 
 jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes shellcheck
+
+      - name: Install actionlint
+        run: |
+          go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
+          echo "${HOME}/go/bin" >> "${GITHUB_PATH}"
+
+      - name: Run checks
+        run: bash script/check
+
   pull_request:
+    needs: checks
     uses: actionshub/reusable-workflows/.github/workflows/pull_request.yaml@ff4646bc003adbd6743ea5aa6ac3ca10937ff9f4
