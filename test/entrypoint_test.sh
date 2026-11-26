@@ -164,12 +164,16 @@ run_entrypoint "WebAuthn timeout fails the action" mfa_timeout "test-token" exam
 assert_exit_code 1 "WebAuthn timeout"
 assert_file_contains "${STDERR_FILE}" "execution expired" "WebAuthn timeout message"
 
-run_entrypoint "successful build pushes every built gem" success "test-token" alpha.gemspec beta.gemspec
+run_entrypoint "successful build pushes every built gem" success "test-token" alpha.gemspec beta.gemspec .hidden.gemspec -edge.gemspec
 assert_exit_code 0 "successful publish"
-assert_file_contains "${GEM_LOG}" "build alpha.gemspec" "alpha gem built"
-assert_file_contains "${GEM_LOG}" "build beta.gemspec" "beta gem built"
-assert_file_contains "${GEM_LOG}" "push --key rubygems alpha-0.1.0.gem" "alpha gem pushed"
-assert_file_contains "${GEM_LOG}" "push --key rubygems beta-0.1.0.gem" "beta gem pushed"
+assert_file_contains "${GEM_LOG}" "build ./alpha.gemspec" "alpha gem built"
+assert_file_contains "${GEM_LOG}" "build ./beta.gemspec" "beta gem built"
+assert_file_contains "${GEM_LOG}" "push --key rubygems ./alpha-0.1.0.gem" "alpha gem pushed"
+assert_file_contains "${GEM_LOG}" "push --key rubygems ./beta-0.1.0.gem" "beta gem pushed"
+assert_file_contains "${GEM_LOG}" "build ./.hidden.gemspec" "hidden gem built"
+assert_file_contains "${GEM_LOG}" "build ./-edge.gemspec" "leading-dash gem built"
+assert_file_contains "${GEM_LOG}" "push --key rubygems ./.hidden-0.1.0.gem" "hidden gem pushed"
+assert_file_contains "${GEM_LOG}" "push --key rubygems ./-edge-0.1.0.gem" "leading-dash gem pushed"
 assert_file_contains "${HOME_DIR}/.gem/credentials" ":rubygems_api_key: test-token" "rubygems credentials written"
 
 if [ "${FAILURES}" -gt 0 ]; then

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -euo pipefail
-shopt -s nullglob
+shopt -s nullglob dotglob
 
 git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
@@ -24,7 +24,7 @@ function build_and_push() {
   cd "${1}" || exit 1
   echo "Building gem"
 
-  local gemspecs=(*.gemspec)
+  local gemspecs=(./*.gemspec)
   if [ "${#gemspecs[@]}" -eq 0 ]; then
     echo "No gemspec files found" >&2
     exit 1
@@ -36,7 +36,7 @@ function build_and_push() {
 
   echo "Pushing gem to rubygems.org"
 
-  local gems=(*.gem)
+  local gems=(./*.gem)
   if [ "${#gems[@]}" -eq 0 ]; then
     echo "No gem files found" >&2
     exit 1
